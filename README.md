@@ -20,4 +20,20 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+## Description
 
+If you need only broadcast mail to many destinations, you may use this script.
+
+## How-to start
+
+1. Make sure, that your computer have right time setting.
+2. Enter your values in configuration section in main.py.
+3. Write start script, like
+
+    cd %ABSOLUTE_PATH_TO_LOCAL_DIRECTORY_WITH_SCRIPT%
+    python main.py
+
+4. Add start script to autorun
+
+(Add shortcut to `start.bat` to 
+`C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup` in windows.)
