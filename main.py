@@ -73,6 +73,7 @@ def update():
     updateMail()
   except Exception as e:
     with open('error.log', 'a') as eout:
+      print(e, type(e))
       print(e, type(e), file = eout)
       eout.close()
 
