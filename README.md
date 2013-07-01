@@ -30,8 +30,8 @@ If you need only broadcast mail to many destinations, you may use this script.
 2. Enter your values in configuration section in main.py.
 3. Write start script, like
 
-    cd %ABSOLUTE_PATH_TO_LOCAL_DIRECTORY_WITH_SCRIPT%
-    python main.py
+        cd %ABSOLUTE_PATH_TO_LOCAL_DIRECTORY_WITH_SCRIPT%
+        python main.py
 
 4. Add start script to autorun
 
