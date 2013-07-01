@@ -16,9 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import datetime, imaplib, smtplib, time
-
-
+### [BEGIN] Configuration section ###
 
 IMAP_SERVER = 'imap.example.com'
 SMTP_SERVER = 'smtp.example.com'
@@ -31,7 +29,9 @@ DISTRIBUTION_LIST = ['a@example.com', 'b@example.com', 'c@example.com']
 MAX_DAYS_AGO_LAST_RUN = 5
 SECONDS_TO_NEXT_TRY = 60 * 5
 
+###  [END]  Configuration section ###
 
+import datetime, imaplib, smtplib, time
 
 def updateMail():
   used = []
