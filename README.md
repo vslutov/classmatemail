@@ -25,10 +25,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 If you need only broadcast mail to many destinations, you may use this script.
 
+## Requirements
+
+Python 2 or Python 3 (well work in python3).
+
+You can download it there: <http://www.python.org/download/>
+
 ## How-to start
 
-1. Make sure, that your computer have right time setting.
-2. Enter your values in configuration section in main.py.
+1. Make sure, that your computer have right system time setting.
+2. Enter your values in configuration section in `main.py`.
 3. Write start script, like
 
         cd %ABSOLUTE_PATH_TO_LOCAL_DIRECTORY_WITH_SCRIPT%
@@ -38,3 +44,10 @@ If you need only broadcast mail to many destinations, you may use this script.
 
 (Add shortcut to `start.bat` to 
 `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup` in windows.)
+
+## How-to backup your mailbox
+
+1. Enter your values in configuration section in `backup.py`.
+2. Enter console and run
+
+        python backup.py
