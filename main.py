@@ -1,7 +1,6 @@
 from __future__ import print_function
 
-"""
-    classmatemail - python-based e-mail broadcaster
+""" classmatemail - python-based e-mail broadcaster
     Copyright (C) 2013 V. S. Lutov
 
     This program is free software: you can redistribute it and/or modify
