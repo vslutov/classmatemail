@@ -33,7 +33,11 @@ SECONDS_TO_NEXT_TRY = 60 * 5
 
 ###  [END]  Configuration section ###
 
-import datetime, imaplib, smtplib, time
+import datetime
+import imaplib
+import smtplib
+import time
+
 
 def updateMail():
     used = []
@@ -51,8 +55,10 @@ def updateMail():
     send = smtplib.SMTP_SSL(SMTP_SERVER)
     send.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
  
-    date = (datetime.date.today() - datetime.timedelta( MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
-    result, data = mail.uid('search', None, '(SENTSINCE {date})'.format(date=date))
+    date = (datetime.date.today() - \
+           datetime.timedelta( MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
+    result, data = mail.uid('search', None, '(SENTSINCE {date})'\
+                            .format(date=date))
 
     for uid in data[0].split():
         if used.count(str(uid)) == 0:
@@ -69,6 +75,7 @@ def updateMail():
     with open('used.txt', 'w') as fout:
         fout.write(' '.join(sended))
         fout.close()
+
 
 def update():
     try:
