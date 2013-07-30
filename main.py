@@ -34,50 +34,50 @@ SECONDS_TO_NEXT_TRY = 60 * 5
 import datetime, imaplib, smtplib, time
 
 def updateMail():
-  used = []
-  sended = []
+    used = []
+    sended = []
 
-  with open('used.txt', 'r') as fout:
-    used = fout.readline().split()
-    fout.close()
-    
-  mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-  mail.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
-  mail.list()
-  mail.select('inbox')
+    with open('used.txt', 'r') as fout:
+        used = fout.readline().split()
+        fout.close()
+        
+    mail = imaplib.IMAP4_SSL(IMAP_SERVER)
+    mail.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
+    mail.list()
+    mail.select('inbox')
 
-  send = smtplib.SMTP_SSL(SMTP_SERVER)
-  send.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
+    send = smtplib.SMTP_SSL(SMTP_SERVER)
+    send.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
  
-  date = (datetime.date.today() - datetime.timedelta( MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
-  result, data = mail.uid('search', None, '(SENTSINCE {date})'.format(date=date))
+    date = (datetime.date.today() - datetime.timedelta( MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
+    result, data = mail.uid('search', None, '(SENTSINCE {date})'.format(date=date))
 
-  for uid in data[0].split():
-    if used.count(str(uid)) == 0:
-      result, data = mail.uid('fetch', uid, '(RFC822)')
-      raw_email = data[0][1]
-      send.sendmail(MAILBOX_ADDRESS, DISTRIBUTION_LIST, raw_email)
-    sended.append(uid)
+    for uid in data[0].split():
+        if used.count(str(uid)) == 0:
+            result, data = mail.uid('fetch', uid, '(RFC822)')
+            raw_email = data[0][1]
+            send.sendmail(MAILBOX_ADDRESS, DISTRIBUTION_LIST, raw_email)
+        sended.append(uid)
 
-  mail.close()
-  mail.logout()
-  send.quit()
-    
-  sended = list(map(str, sended))
-  with open('used.txt', 'w') as fout:
-    fout.write(' '.join(sended))
-    fout.close()
+    mail.close()
+    mail.logout()
+    send.quit()
+        
+    sended = list(map(str, sended))
+    with open('used.txt', 'w') as fout:
+        fout.write(' '.join(sended))
+        fout.close()
 
 def update():
-  try:
-    updateMail()
-  except Exception as e:
-    with open('error.log', 'a') as eout:
-      print(e, type(e))
-      print(e, type(e), file = eout)
-      eout.close()
+    try:
+        updateMail()
+    except Exception as e:
+        with open('error.log', 'a') as eout:
+            print(e, type(e))
+            print(e, type(e), file=eout)
+            eout.close()
 
 
 while True:
-  update()
-  time.sleep( SECONDS_TO_NEXT_TRY )
+    update()
+    time.sleep( SECONDS_TO_NEXT_TRY )
