@@ -17,18 +17,16 @@ from __future__ import print_function
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-
-### [BEGIN] Configuration section ###
-
-IMAP_SERVER = 'imap.example.com'
-SMTP_SERVER = 'smtp.example.com'
-
-MAILBOX_ADDRESS = 'classmates@example.com'
-MAILBOX_PASSWORD = 'correctHorseBatteryStaple'
-
-###  [END]  Configuration section ###
-
 import imaplib
+
+try:
+    import config
+    if not config.READY_CONFIG:
+        raise ImportError()
+except ImportError as e:
+    print("You haven't set config variables yet.")
+    print("Please, view README file.")
+    exit()
 
 
 class ReadingMailError(Exception):
@@ -42,8 +40,8 @@ class ReadingMailError(Exception):
 
 with open('console.log', 'a') as logout:
 
-    mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-    mail.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
+    mail = imaplib.IMAP4_SSL(config.IMAP_SERVER)
+    mail.login(config.MAILBOX_ADDRESS, config.MAILBOX_PASSWORD)
     mail.select('archivation')
  
     result, data = mail.uid('search', None, 'ALL')
