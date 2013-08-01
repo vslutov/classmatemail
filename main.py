@@ -17,25 +17,19 @@ from __future__ import print_function
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-### [BEGIN] Configuration section ###
-
-IMAP_SERVER = 'imap.example.com'
-SMTP_SERVER = 'smtp.example.com'
-
-MAILBOX_ADDRESS = 'classmates@example.com'
-MAILBOX_PASSWORD = 'correctHorseBatteryStaple'
-
-DISTRIBUTION_LIST = ['a@example.com', 'b@example.com', 'c@example.com']
-
-MAX_DAYS_AGO_LAST_RUN = 5
-SECONDS_TO_NEXT_TRY = 60 * 5
-
-###  [END]  Configuration section ###
-
 import datetime
 import imaplib
 import smtplib
 import time
+
+try:
+    import config
+    if not config.READY_CONFIG:
+        raise ImportError()
+except ImportError as e:
+    print("You haven't set config variables yet.")
+    print("Please, view README file.")
+    exit()
 
 
 def updateMail():
@@ -46,29 +40,30 @@ def updateMail():
         used = fout.readline().split()
         fout.close()
         
-    mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-    mail.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
-    mail.list()
-    mail.select('inbox')
+    imap = imaplib.IMAP4_SSL(config.IMAP_SERVER)
+    imap.login(config.MAILBOX_ADDRESS, config.MAILBOX_PASSWORD)
+    imap.select('inbox')
 
-    send = smtplib.SMTP_SSL(SMTP_SERVER)
-    send.login(MAILBOX_ADDRESS, MAILBOX_PASSWORD)
+    smtp = smtplib.SMTP_SSL(config.SMTP_SERVER)
+    smtp.login(config.MAILBOX_ADDRESS, config.MAILBOX_PASSWORD)
  
-    date = (datetime.date.today() - \
-           datetime.timedelta( MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
-    result, data = mail.uid('search', None, '(SENTSINCE {date})'\
+    date = (datetime.date.today() - datetime.timedelta( \
+            config.MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
+    
+    result, data = imap.uid('search', None, '(SENTSINCE {date})'\
                             .format(date=date))
 
     for uid in data[0].split():
         if used.count(str(uid)) == 0:
-            result, data = mail.uid('fetch', uid, '(RFC822)')
+            result, data = imap.uid('fetch', uid, '(RFC822)')
             raw_email = data[0][1]
-            send.sendmail(MAILBOX_ADDRESS, DISTRIBUTION_LIST, raw_email)
+            smtp.sendmail(config.MAILBOX_ADDRESS, \
+                          config.DISTRIBUTION_LIST, raw_email)
         sended.append(uid)
 
-    mail.close()
-    mail.logout()
-    send.quit()
+    imap.close()
+    imap.logout()
+    smtp.quit()
         
     sended = list(map(str, sended))
     with open('used.txt', 'w') as fout:
@@ -88,4 +83,4 @@ def update():
 
 while True:
     update()
-    time.sleep( SECONDS_TO_NEXT_TRY )
+    time.sleep( config.SECONDS_TO_NEXT_TRY )
