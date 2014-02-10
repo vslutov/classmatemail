@@ -26,6 +26,6 @@ DISTRIBUTION_LIST = ['a@example.com', 'b@example.com', 'c@example.com']
 MAX_DAYS_AGO_LAST_RUN = 5
 
 RUN_ONCE = False
-SECONDS_TO_NEXT_TRY = 60 * 5
+SECONDS_TO_NEXT_TRY = 60 * 5 # If RUN_ONCE is False
 
 READY_CONFIG = False
