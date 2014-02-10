@@ -50,7 +50,7 @@ def updateMail():
     date = (datetime.date.today() - datetime.timedelta( \
             config.MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
 
-    result, data = imap.uid('search', None, '(SENTSINCE {date})'\
+    result, data = imap.uid('search', None, '(SINCE {date})'\
                             .format(date=date))
 
     for uid in data[0].split():
