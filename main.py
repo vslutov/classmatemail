@@ -82,7 +82,7 @@ def update():
 
 
 while True:
-    # update()
+    update()
     try:
         if config.RUN_ONCE:
             exit()
