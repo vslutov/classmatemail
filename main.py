@@ -53,13 +53,14 @@ def updateMail():
     result, data = imap.uid('search', None, '(SINCE {date})'\
                             .format(date=date))
 
-    for uid in data[0].split():
-        if used.count(str(uid)) == 0:
-            result, data = imap.uid('fetch', uid, '(RFC822)')
-            raw_email = data[0][1]
-            smtp.sendmail(config.MAILBOX_ADDRESS, \
-                          config.DISTRIBUTION_LIST, raw_email)
-        sended.append(uid)
+    if data[0] is not None:
+        for uid in data[0].split():
+            if used.count(str(uid)) == 0:
+                result, data = imap.uid('fetch', uid, '(RFC822)')
+                raw_email = data[0][1]
+                smtp.sendmail(config.MAILBOX_ADDRESS, \
+                              config.DISTRIBUTION_LIST, raw_email)
+            sended.append(uid)
 
     imap.close()
     imap.logout()
