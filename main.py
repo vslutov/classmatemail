@@ -39,17 +39,17 @@ def updateMail():
     with open('used.txt', 'r') as fout:
         used = fout.readline().split()
         fout.close()
-        
+
     imap = imaplib.IMAP4_SSL(config.IMAP_SERVER)
     imap.login(config.MAILBOX_ADDRESS, config.MAILBOX_PASSWORD)
     imap.select('inbox')
 
     smtp = smtplib.SMTP_SSL(config.SMTP_SERVER)
     smtp.login(config.MAILBOX_ADDRESS, config.MAILBOX_PASSWORD)
- 
+
     date = (datetime.date.today() - datetime.timedelta( \
             config.MAX_DAYS_AGO_LAST_RUN )).strftime("%d-%b-%Y")
-    
+
     result, data = imap.uid('search', None, '(SENTSINCE {date})'\
                             .format(date=date))
 
@@ -64,7 +64,7 @@ def updateMail():
     imap.close()
     imap.logout()
     smtp.quit()
-        
+
     sended = list(map(str, sended))
     with open('used.txt', 'w') as fout:
         fout.write(' '.join(sended))
@@ -82,5 +82,11 @@ def update():
 
 
 while True:
-    update()
+    # update()
+    try:
+        if config.RUN_ONCE:
+            exit()
+    except AttributeError:
+        pass
     time.sleep( config.SECONDS_TO_NEXT_TRY )
+
